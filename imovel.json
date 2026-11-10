@@ -1,0 +1,25 @@
+{
+  "titulo": "Casa ampla com piscina",
+  "descricao": "Excelente casa em bairro tranquilo, proximo a escolas e comercios.",
+  "precoVenda": 850000.00,
+  "precoAluguel": 3500.00,
+  "finalidade": "Residencial",
+  "status": "Disponivel",
+  "dormitorios": 3,
+  "banheiros": 2,
+  "garagem": 2,
+  "areaTotal": 300.50,
+  "areaConstruida": 180.75,
+  "endereco": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Casa 02",
+  "cep": "12345-678",
+  "caracteristicas": "Piscina, Churrasqueira, Jardim",
+  "destaque": true,
+  "tipoImovel": {
+    "id": 1
+  },
+  "bairro": {
+    "id": 1
+  }
+}
