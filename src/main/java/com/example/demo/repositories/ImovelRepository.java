@@ -1,9 +1,16 @@
 package com.example.demo.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.models.ImovelModel;
 
-public interface ImovelRepository extends JpaRepository<ImovelModel, Integer> {
+public interface ImovelRepository extends JpaRepository<ImovelModel, Integer>, JpaSpecificationExecutor<ImovelModel> {
 
+    @Query("select distinct imovel.finalidade from ImovelModel imovel "
+            + "where imovel.finalidade is not null order by imovel.finalidade")
+    List<String> findDistinctFinalidades();
 }

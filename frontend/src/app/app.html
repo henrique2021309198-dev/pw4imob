@@ -1,94 +1,25 @@
 <header class="topbar">
-  <a class="brand" href="/" aria-label="Imóveis, início">
+  <a class="brand" routerLink="/" aria-label="Imóveis, início">
     <span class="brand-mark" aria-hidden="true">I</span>
     <span>imóveis<span class="brand-dot">.</span></span>
   </a>
-  <span class="author">Henrique Kahlmeier · Angular</span>
+  <nav class="navigation" aria-label="Navegação principal">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Vitrine</a>
+    @if (auth.isAuthenticated()) {
+      @if (auth.role() === 'ADMIN') {
+        <a routerLink="/admin" routerLinkActive="active">Painel admin</a>
+      } @else {
+        <a routerLink="/cliente" routerLinkActive="active">Área do cliente</a>
+      }
+      <span class="user-email">{{ auth.email() }}</span>
+      <button class="link-button" type="button" (click)="sair()">Sair</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active">Entrar</a>
+    }
+  </nav>
 </header>
 
-<main>
-  <section class="intro">
-    <p class="eyebrow">Encontre seu próximo lugar</p>
-    <h1>Imóveis para você</h1>
-    <p class="intro-copy">Explore as opções disponíveis e encontre um espaço para chamar de seu.</p>
-  </section>
-
-  <section class="listings" aria-labelledby="listing-title">
-    <div class="section-heading">
-      <div>
-        <h2 id="listing-title">Imóveis disponíveis</h2>
-        @if (!carregando() && !erro()) {
-          <p class="result-count">{{ imoveis().length }} resultado(s)</p>
-        }
-      </div>
-      <button class="refresh-button" type="button" (click)="carregarImoveis()" [disabled]="carregando()">
-        {{ carregando() ? 'Carregando…' : 'Atualizar lista' }}
-      </button>
-    </div>
-
-    @if (carregando()) {
-      <div class="message-card" role="status">Buscando imóveis…</div>
-    } @else if (erro()) {
-      <div class="message-card error" role="alert">
-        <p>{{ erro() }}</p>
-        <button class="text-button" type="button" (click)="carregarImoveis()">Tentar novamente</button>
-      </div>
-    } @else if (imoveis().length === 0) {
-      <div class="message-card empty">
-        <span class="empty-icon" aria-hidden="true">⌂</span>
-        <h3>Nenhum imóvel cadastrado ainda</h3>
-        <p>Quando houver imóveis disponíveis, eles aparecerão aqui.</p>
-      </div>
-    } @else {
-      <div class="property-grid">
-        @for (imovel of imoveis(); track imovel.id) {
-          <article class="property-card">
-            <div class="property-visual" aria-hidden="true">
-              <span class="property-type">{{ imovel.tipoImovel?.nome ?? 'Imóvel' }}</span>
-              <span class="house-icon">⌂</span>
-              @if (imovel.destaque) {
-                <span class="featured">Destaque</span>
-              }
-            </div>
-            <div class="property-content">
-              <p class="location">
-                {{ imovel.bairro?.nome ?? 'Localização não informada' }}
-                @if (imovel.endereco) {
-                  <span> · {{ imovel.endereco }}</span>
-                }
-              </p>
-              <h3>{{ imovel.titulo }}</h3>
-              @if (imovel.descricao) {
-                <p class="description">{{ imovel.descricao }}</p>
-              }
-              <div class="features">
-                @if (imovel.dormitorios != null) {
-                  <span>{{ imovel.dormitorios }} quartos</span>
-                }
-                @if (imovel.banheiros != null) {
-                  <span>{{ imovel.banheiros }} banheiros</span>
-                }
-                @if (imovel.garagem != null) {
-                  <span>{{ imovel.garagem }} vagas</span>
-                }
-                @if (imovel.areaTotal != null) {
-                  <span>{{ imovel.areaTotal }} m²</span>
-                }
-              </div>
-              <div class="prices">
-                @if (imovel.precoVenda != null) {
-                  <p><span>Venda</span><strong>{{ formatarPreco(imovel.precoVenda) }}</strong></p>
-                }
-                @if (imovel.precoAluguel != null) {
-                  <p><span>Aluguel</span><strong>{{ formatarPreco(imovel.precoAluguel) }}<small>/mês</small></strong></p>
-                }
-              </div>
-            </div>
-          </article>
-        }
-      </div>
-    }
-  </section>
+<main class="app-main">
+  <router-outlet />
 </main>
-
-<footer>Projeto Aula 1 · Backend Java + Front-end Angular</footer>
+<footer>Imóveis · Vitrine e área do cliente</footer>

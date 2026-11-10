@@ -1,13 +1,18 @@
 package com.example.demo.controllers;
 
 import java.net.URI;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,6 +76,56 @@ public class ImovelController {
     public ResponseEntity<List<ImovelModel>> getAll() {
         List<ImovelModel> list = service.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    @GetMapping("/finalidades")
+    public ResponseEntity<List<String>> getFinalidades() {
+        return ResponseEntity.ok(service.getFinalidades());
+    }
+
+    @GetMapping("/pagina")
+    public ResponseEntity<?> search(
+            @RequestParam(required = false) Integer tipoImovelId,
+            @RequestParam(required = false) Integer bairroId,
+            @RequestParam(required = false) String finalidade,
+            @RequestParam(required = false) BigDecimal precoMin,
+            @RequestParam(required = false) BigDecimal precoMax,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "recentes") String sort,
+            @RequestParam(defaultValue = "desc") String direction) {
+        if (page < 0 || size < 1 || size > 50) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Página deve ser >= 0 e tamanho entre 1 e 50."));
+        }
+
+        Sort.Direction sortDirection;
+        try {
+            sortDirection = Sort.Direction.fromString(direction);
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Ordenação deve ser 'asc' ou 'desc'."));
+        }
+
+        String sortProperty = switch (sort) {
+            case "recentes" -> "id";
+            case "precoVenda" -> "precoVenda";
+            case "precoAluguel" -> "precoAluguel";
+            case "titulo" -> "titulo";
+            default -> null;
+        };
+        if (sortProperty == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message",
+                            "Ordenação deve ser 'recentes', 'precoVenda', 'precoAluguel' ou 'titulo'."));
+        }
+
+        Page<ImovelModel> result = service.search(
+                tipoImovelId,
+                bairroId,
+                finalidade,
+                precoMin,
+                precoMax,
+                PageRequest.of(page, size, Sort.by(sortDirection, sortProperty)));
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/{id}")

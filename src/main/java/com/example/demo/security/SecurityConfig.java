@@ -42,8 +42,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/imoveis", "/imoveis/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/imoveis/sabermais/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/imoveis", "/imoveis/**",
+                                "/bairros", "/bairros/**",
+                                "/tipos-imoveis", "/tipos-imoveis/**",
+                                "/fotos-imoveis/imovel/**",
+                                "/uploads/**").permitAll()
                         .requestMatchers("/users", "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/imoveis/**", "/bairros/**", "/tipos-imoveis/**",
+                                "/fotos-imoveis/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/imoveis/**", "/bairros/**", "/tipos-imoveis/**",
+                                "/fotos-imoveis/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/fotos-imoveis/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/imoveis/**", "/bairros/**", "/tipos-imoveis/**",
+                                "/fotos-imoveis/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

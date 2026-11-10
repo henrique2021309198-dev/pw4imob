@@ -9,7 +9,7 @@ public class FotoImovelResponseDTO {
     private Integer id;
     private ImovelResponseDTO imovel;
     private String nomeArquivo;
-    private String caminho;
+    private String url;
     private Boolean capa;
     private Integer ordem;
     private LocalDateTime createdAt;

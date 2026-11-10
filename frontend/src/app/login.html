@@ -1,0 +1,26 @@
+<section class="auth-page">
+  <div class="auth-card">
+    <p class="eyebrow">Bem-vindo de volta</p>
+    <h1>Entrar na sua conta</h1>
+    <p class="intro-copy">Acesse sua área para continuar.</p>
+    @if (aviso()) {
+      <p class="form-info" role="status">{{ aviso() }}</p>
+    }
+    @if (erro()) {
+      <p class="form-error" role="alert">{{ erro() }}</p>
+    }
+    <form class="contact-form" (ngSubmit)="entrar()">
+      <label>
+        E-mail
+        <input name="email" type="email" required autocomplete="username" [(ngModel)]="email" />
+      </label>
+      <label>
+        Senha
+        <input name="senha" type="password" required autocomplete="current-password" [(ngModel)]="senha" />
+      </label>
+      <button class="button button-primary" type="submit" [disabled]="carregando()">
+        {{ carregando() ? 'Entrando…' : 'Entrar' }}
+      </button>
+    </form>
+  </div>
+</section>

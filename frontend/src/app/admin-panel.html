@@ -1,0 +1,18 @@
+<section class="page-container">
+  <p class="eyebrow">Administração</p>
+  <h1>Painel administrativo</h1>
+  <p class="intro-copy">Sessão administrativa de {{ auth.email() }}.</p>
+  <div class="dashboard-grid">
+    <article class="dashboard-card">
+      <span class="dashboard-icon" aria-hidden="true">⌂</span>
+      <h2>Vitrine de imóveis</h2>
+      <p>Consulte os imóveis publicados e abra seus detalhes.</p>
+      <a class="button button-primary" routerLink="/">Abrir vitrine</a>
+    </article>
+    <article class="dashboard-card">
+      <span class="dashboard-icon" aria-hidden="true">⚙</span>
+      <h2>Cadastros</h2>
+      <p>As rotas administrativas de cadastro estão protegidas por perfil ADMIN na API.</p>
+    </article>
+  </div>
+</section>

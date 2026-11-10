@@ -1,0 +1,159 @@
+<section class="page-container">
+  <div class="hero">
+    <p class="eyebrow">Encontre seu próximo lugar</p>
+    <h1>Imóveis para você</h1>
+    <p class="intro-copy">Explore as opções disponíveis e encontre um espaço para chamar de seu.</p>
+  </div>
+
+  <section class="filter-panel" aria-labelledby="filter-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Busca</p>
+        <h2 id="filter-title">Encontre um imóvel</h2>
+      </div>
+    </div>
+    @if (erroFiltros()) {
+      <p class="form-error" role="alert">{{ erroFiltros() }}</p>
+    }
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+      <label>
+        Finalidade
+        <select name="finalidade" [(ngModel)]="finalidade">
+          <option value="">Todas</option>
+          @for (opcao of finalidades(); track opcao) {
+            <option [value]="opcao">{{ opcao }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Tipo de imóvel
+        <select name="tipoImovelId" [(ngModel)]="tipoImovelId">
+          <option value="">Todos</option>
+          @for (tipo of tipos(); track tipo.id) {
+            <option [value]="tipo.id">{{ tipo.nome }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Bairro
+        <select name="bairroId" [(ngModel)]="bairroId">
+          <option value="">Todos</option>
+          @for (bairro of bairros(); track bairro.id) {
+            <option [value]="bairro.id">{{ bairro.nome }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Preço mínimo
+        <input name="precoMin" type="number" min="0" step="0.01" [(ngModel)]="precoMin" />
+      </label>
+      <label>
+        Preço máximo
+        <input name="precoMax" type="number" min="0" step="0.01" [(ngModel)]="precoMax" />
+      </label>
+      <label>
+        Ordenar por
+        <select name="sort" [(ngModel)]="sort">
+          <option value="recentes">Mais recentes</option>
+          <option value="precoVenda">Preço de venda</option>
+          <option value="precoAluguel">Preço de aluguel</option>
+          <option value="titulo">Título</option>
+        </select>
+      </label>
+      <label>
+        Ordem
+        <select name="direction" [(ngModel)]="direction">
+          <option value="desc">Decrescente</option>
+          <option value="asc">Crescente</option>
+        </select>
+      </label>
+      <div class="filter-actions">
+        <button class="button button-primary" type="submit" [disabled]="carregando()">Buscar</button>
+        <button class="button button-secondary" type="button" (click)="limparFiltros()" [disabled]="carregando()">
+          Limpar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="listings" aria-labelledby="listing-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Vitrine</p>
+        <h2 id="listing-title">Imóveis disponíveis</h2>
+        @if (resultado(); as pagina) {
+          <p class="result-count">{{ pagina.totalElements }} resultado(s)</p>
+        }
+      </div>
+      <button class="button button-secondary" type="button" (click)="carregarImoveis(resultado()?.number ?? 0)"
+        [disabled]="carregando()">
+        {{ carregando() ? 'Carregando…' : 'Atualizar' }}
+      </button>
+    </div>
+
+    @if (carregando()) {
+      <div class="message-card" role="status">Buscando imóveis…</div>
+    } @else if (erro()) {
+      <div class="message-card error" role="alert">
+        <p>{{ erro() }}</p>
+        <button class="text-button" type="button" (click)="carregarImoveis(0)">Tentar novamente</button>
+      </div>
+    } @else if (!resultado()?.content?.length) {
+      <div class="message-card empty">
+        <span class="empty-icon" aria-hidden="true">⌂</span>
+        <h3>Nenhum imóvel encontrado</h3>
+        <p>Altere os filtros ou tente novamente mais tarde.</p>
+      </div>
+    } @else {
+      <div class="property-grid">
+        @for (imovel of resultado()?.content; track imovel.id) {
+          <article class="property-card">
+            <div class="property-visual" aria-hidden="true">
+              <span class="property-type">{{ imovel.tipoImovel?.nome ?? 'Imóvel' }}</span>
+              <span class="house-icon">⌂</span>
+              @if (imovel.destaque) {
+                <span class="featured">Destaque</span>
+              }
+            </div>
+            <div class="property-content">
+              <p class="location">
+                {{ imovel.bairro?.nome ?? 'Localização não informada' }}
+                @if (imovel.endereco) {
+                  <span> · {{ imovel.endereco }}</span>
+                }
+              </p>
+              <h3>{{ imovel.titulo }}</h3>
+              @if (imovel.descricao) {
+                <p class="description">{{ imovel.descricao }}</p>
+              }
+              <div class="features">
+                @if (imovel.dormitorios != null) { <span>{{ imovel.dormitorios }} quartos</span> }
+                @if (imovel.banheiros != null) { <span>{{ imovel.banheiros }} banheiros</span> }
+                @if (imovel.garagem != null) { <span>{{ imovel.garagem }} vagas</span> }
+                @if (imovel.areaTotal != null) { <span>{{ imovel.areaTotal }} m²</span> }
+              </div>
+              <div class="prices">
+                @if (imovel.precoVenda != null) {
+                  <p><span>Venda</span><strong>{{ formatarPreco(imovel.precoVenda) }}</strong></p>
+                }
+                @if (imovel.precoAluguel != null) {
+                  <p><span>Aluguel</span><strong>{{ formatarPreco(imovel.precoAluguel) }}<small>/mês</small></strong></p>
+                }
+              </div>
+              <a class="button button-primary detail-link" [routerLink]="['/imoveis', imovel.id]">Ver detalhes</a>
+            </div>
+          </article>
+        }
+      </div>
+      @if (resultado(); as pagina) {
+        <nav class="pagination" aria-label="Paginação dos imóveis">
+          <button class="button button-secondary" type="button" (click)="carregarImoveis(pagina.number - 1)"
+            [disabled]="pagina.first || carregando()">Anterior</button>
+          <span>Página {{ pagina.number + 1 }} de {{ pagina.totalPages }}</span>
+          <button class="button button-secondary" type="button" (click)="carregarImoveis(pagina.number + 1)"
+            [disabled]="pagina.last || carregando()">Próxima</button>
+        </nav>
+      }
+    }
+  </section>
+</section>

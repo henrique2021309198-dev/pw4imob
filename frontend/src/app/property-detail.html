@@ -1,0 +1,73 @@
+<section class="page-container">
+  <a class="back-link" routerLink="/">← Voltar à vitrine</a>
+  @if (carregando()) {
+    <div class="message-card" role="status">Carregando imóvel…</div>
+  } @else if (erro()) {
+    <div class="message-card error" role="alert">{{ erro() }}</div>
+  } @else if (imovel(); as item) {
+    <div class="detail-layout">
+      <article class="detail-main">
+        <div class="gallery">
+          @if (fotos().length) {
+            @for (foto of fotos(); track foto.id) {
+              @if (urlDaFoto(foto.url); as url) {
+                <img [src]="url" [alt]="'Foto do imóvel ' + item.titulo" />
+              }
+            }
+          } @else {
+            <div class="property-visual detail-placeholder" aria-label="Imagem não cadastrada">
+              <span class="house-icon">⌂</span>
+            </div>
+          }
+        </div>
+        <p class="eyebrow">{{ item.tipoImovel?.nome ?? 'Imóvel' }} · {{ item.finalidade ?? 'Finalidade não informada' }}</p>
+        <h1>{{ item.titulo }}</h1>
+        <p class="location">{{ item.bairro?.nome ?? 'Localização não informada' }} · {{ item.endereco ?? 'Endereço não informado' }}</p>
+        @if (item.descricao) {
+          <p class="description detail-description">{{ item.descricao }}</p>
+        }
+        <div class="features detail-features">
+          @if (item.dormitorios != null) { <span>{{ item.dormitorios }} quartos</span> }
+          @if (item.banheiros != null) { <span>{{ item.banheiros }} banheiros</span> }
+          @if (item.garagem != null) { <span>{{ item.garagem }} vagas</span> }
+          @if (item.areaTotal != null) { <span>{{ item.areaTotal }} m² de área total</span> }
+          @if (item.areaConstruida != null) { <span>{{ item.areaConstruida }} m² construídos</span> }
+        </div>
+        @if (item.caracteristicas) {
+          <section class="detail-section">
+            <h2>Características</h2>
+            <p>{{ item.caracteristicas }}</p>
+          </section>
+        }
+        <div class="prices detail-prices">
+          @if (item.precoVenda != null) {
+            <p><span>Venda</span><strong>{{ formatarPreco(item.precoVenda) }}</strong></p>
+          }
+          @if (item.precoAluguel != null) {
+            <p><span>Aluguel</span><strong>{{ formatarPreco(item.precoAluguel) }}<small>/mês</small></strong></p>
+          }
+        </div>
+      </article>
+
+      <aside class="contact-panel">
+        <p class="eyebrow">Fale com a imobiliária</p>
+        <h2>Tenho interesse</h2>
+        @if (mensagem()) {
+          <p class="form-success" role="status">{{ mensagem() }}</p>
+        }
+        @if (erroContato()) {
+          <p class="form-error" role="alert">{{ erroContato() }}</p>
+        }
+        <form class="contact-form" (ngSubmit)="enviarContato()">
+          <label>Nome<input name="nome" required autocomplete="name" [(ngModel)]="contato.nome" /></label>
+          <label>E-mail<input name="email" type="email" required autocomplete="email" [(ngModel)]="contato.email" /></label>
+          <label>Telefone<input name="telefone" type="tel" autocomplete="tel" [(ngModel)]="contato.telefone" /></label>
+          <label>Mensagem<textarea name="mensagem" rows="4" [(ngModel)]="contato.mensagem"></textarea></label>
+          <button class="button button-primary" type="submit" [disabled]="enviando()">
+            {{ enviando() ? 'Enviando…' : 'Solicitar informações' }}
+          </button>
+        </form>
+      </aside>
+    </div>
+  }
+</section>

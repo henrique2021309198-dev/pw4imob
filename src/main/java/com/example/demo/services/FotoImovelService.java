@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.UriUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dtos.FotoImovelRequestDTO;
@@ -96,6 +98,12 @@ public class FotoImovelService {
                 .collect(Collectors.toList());
     }
 
+    public List<FotoImovelResponseDTO> findByImovelId(Integer imovelId) {
+        return fotoImovelRepository.findByImovelId(imovelId).stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public FotoImovelResponseDTO findById(Integer id) {
         Optional<FotoImovel> foto = fotoImovelRepository.findById(id);
         return foto.map(this::toResponseDTO).orElse(null);
@@ -165,7 +173,10 @@ public class FotoImovelService {
         FotoImovelResponseDTO dto = new FotoImovelResponseDTO();
         dto.setId(foto.getId());
         dto.setNomeArquivo(foto.getNomeArquivo());
-        dto.setCaminho(foto.getCaminho());
+        if (foto.getImovel() != null && foto.getNomeArquivo() != null) {
+            dto.setUrl("/uploads/" + foto.getImovel().getId() + "/"
+                    + UriUtils.encodePathSegment(foto.getNomeArquivo(), StandardCharsets.UTF_8));
+        }
         dto.setCapa(foto.getCapa());
         dto.setOrdem(foto.getOrdem());
         dto.setCreatedAt(foto.getCreatedAt());

@@ -43,6 +43,11 @@ public class FotoImovelController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @GetMapping("/imovel/{imovelId}")
+    public ResponseEntity<List<FotoImovelResponseDTO>> findByImovelId(@PathVariable Integer imovelId) {
+        return ResponseEntity.ok(fotoImovelService.findByImovelId(imovelId));
+    }
+
     @PostMapping
     public ResponseEntity<FotoImovelResponseDTO> create(@RequestBody FotoImovelRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(fotoImovelService.create(dto));
