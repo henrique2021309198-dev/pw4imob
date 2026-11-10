@@ -1,0 +1,273 @@
+$pink-ink: #5b1746;
+$pink-deep: #891252;
+$pink-bright: #c42076;
+$pink-border: #f3c5dc;
+$rainbow: linear-gradient(90deg, #f96791, #ffae83, #f9d56d, #9bdbb7, #8cbef0, #bd99ec);
+
+html body {
+  background:
+    radial-gradient(ellipse at 12% 8%, #fff 0%, transparent 32%),
+    radial-gradient(ellipse at 88% 22%, #ffe1f1 0%, transparent 34%),
+    linear-gradient(150deg, #fff5fa 0%, #fff0f8 50%, #f8edff 100%);
+  color: $pink-ink;
+}
+
+.topbar {
+  background: rgba(255, 255, 255, 0.88);
+  border: 0;
+  box-shadow: 0 4px 22px rgba(151, 34, 96, 0.07);
+  position: relative;
+
+  &::after {
+    background: $rainbow;
+    bottom: 0;
+    content: '';
+    height: 4px;
+    left: 0;
+    position: absolute;
+    right: 0;
+  }
+}
+
+.brand,
+h1,
+h2,
+.property-content h3,
+.empty h3 {
+  color: $pink-ink;
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, #ff7fb8, #b768d3);
+  box-shadow: 0 4px 12px rgba(196, 32, 118, 0.22);
+  color: #fff;
+}
+
+.brand-dot,
+.eyebrow {
+  color: #a71966;
+}
+
+.navigation a,
+.link-button,
+.user-email {
+  color: #75435f;
+}
+
+.navigation a.active,
+.navigation a:hover,
+.link-button:hover,
+.text-button,
+.back-link {
+  color: $pink-deep;
+}
+
+.hero {
+  background: linear-gradient(125deg, #ffe1f1, #ffeff8 55%, #f2e8ff);
+  border: 1px solid #f8cce1;
+  border-radius: 1.5rem;
+  box-shadow: 0 14px 40px rgba(169, 51, 112, 0.09);
+  max-width: none;
+  min-height: 225px;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  position: relative;
+
+  &::after {
+    background: radial-gradient(
+      ellipse at 50% 100%,
+      transparent 0 31%,
+      #fbf1ff 31% 36%,
+      #c3a2f0 36% 42%,
+      #9fcaf5 42% 48%,
+      #a9dec4 48% 54%,
+      #ffe39a 54% 60%,
+      #ffc2a3 60% 66%,
+      #fb8cb5 66% 72%,
+      transparent 72%
+    );
+    bottom: -5px;
+    content: '';
+    height: 170px;
+    opacity: 0.85;
+    pointer-events: none;
+    position: absolute;
+    right: 3%;
+    width: 270px;
+  }
+
+  > * {
+    max-width: 62%;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.intro-copy,
+.description,
+.detail-section p,
+.dashboard-card p {
+  color: #76566a;
+}
+
+.filter-panel,
+.contact-panel,
+.auth-card,
+.dashboard-card,
+.property-card,
+.message-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: $pink-border;
+  box-shadow: 0 12px 30px rgba(151, 34, 96, 0.07);
+}
+
+.filter-panel,
+.contact-panel,
+.auth-card,
+.dashboard-card,
+.property-card {
+  border-radius: 1.15rem;
+}
+
+.filters label,
+.contact-form label,
+.features {
+  color: #74455f;
+}
+
+input,
+select,
+textarea {
+  background: #fffafd;
+  border-color: #efc6dc;
+  color: $pink-ink;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: $pink-bright;
+  outline-color: #ffd2e8;
+}
+
+.button {
+  border-radius: 0.75rem;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+
+.button-primary {
+  background: linear-gradient(105deg, #a91661, #ae287f);
+  box-shadow: 0 5px 14px rgba(169, 22, 97, 0.18);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(105deg, #86104e, #8d1c67);
+    transform: translateY(-2px);
+  }
+}
+
+.button-secondary {
+  background: #fff8fc;
+  border-color: #efc6dc;
+  color: #7e2056;
+
+  &:hover:not(:disabled) {
+    background: #ffeaf5;
+  }
+}
+
+.property-card {
+  transition: box-shadow 160ms ease, transform 160ms ease;
+
+  &:hover {
+    box-shadow: 0 18px 38px rgba(151, 34, 96, 0.16);
+    transform: translateY(-3px);
+  }
+}
+
+.property-visual {
+  background:
+    radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.75) 0 3px, transparent 4px),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.75) 0 4px, transparent 5px),
+    linear-gradient(125deg, #ffc5df, #f6d5f3 50%, #d2e6ff);
+  color: #a82170;
+}
+
+.property-type {
+  color: $pink-ink;
+}
+
+.featured {
+  background: #a41b67;
+}
+
+.location,
+.prices strong {
+  color: #9b1c62;
+}
+
+.prices span,
+.prices small,
+.result-count,
+.pagination span,
+.empty p {
+  color: #795b6e;
+}
+
+.features,
+.detail-prices {
+  border-color: #f4e3ed;
+}
+
+.empty-icon,
+.dashboard-icon {
+  background: linear-gradient(135deg, #ffe0ef, #eee1ff);
+  color: #a71966;
+}
+
+footer {
+  background: rgba(255, 255, 255, 0.65);
+  border-color: #f4d0e2;
+  color: #795b6e;
+}
+
+@media (max-width: 720px) {
+  .filters {
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  }
+
+  .filter-actions,
+  .section-heading,
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero {
+    min-height: 0;
+    padding-bottom: 6rem;
+
+    > * {
+      max-width: 100%;
+    }
+
+    &::after {
+      height: 80px;
+      opacity: 0.65;
+      right: 0;
+      width: 150px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .property-card {
+    transition: none;
+  }
+
+  .button-primary:hover:not(:disabled),
+  .property-card:hover {
+    transform: none;
+  }
+}
